@@ -1,0 +1,137 @@
+openapi: 3.1.0
+info:
+  title: Gym Studio SaaS API
+  version: 0.1.0
+  description: >
+    REST API for managing gym memberships, billing, classes, attendance, and access control.
+servers:
+  - url: https://api.example.com
+    description: Production
+  - url: http://localhost:4000
+    description: Development
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+paths:
+  /health:
+    get:
+      summary: Health check
+      responses:
+        "200":
+          description: Server is healthy
+  /api/auth/login:
+    post:
+      summary: Login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+      responses:
+        "200":
+          description: Login response
+  /api/members:
+    get:
+      summary: List members
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Member collection
+    post:
+      summary: Create member
+      security:
+        - bearerAuth: []
+      responses:
+        "201":
+          description: Member created
+  /api/plans:
+    get:
+      summary: List plans
+      responses:
+        "200":
+          description: Plan collection
+    post:
+      summary: Create plan
+      security:
+        - bearerAuth: []
+      responses:
+        "201":
+          description: Plan created
+  /api/classes:
+    get:
+      summary: List class events
+      parameters:
+        - in: query
+          name: from
+          schema:
+            type: string
+        - in: query
+          name: to
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Class event collection
+  /api/bookings:
+    post:
+      summary: Create booking
+      security:
+        - bearerAuth: []
+      responses:
+        "201":
+          description: Booking created
+  /api/attendance/checkin:
+    post:
+      summary: Member check-in
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Check-in result
+  /api/leads:
+    post:
+      summary: Capture lead
+      responses:
+        "201":
+          description: Lead captured
+  /api/billing/invoices:
+    get:
+      summary: List invoices
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Invoice collection
+    post:
+      summary: Create invoice
+      security:
+        - bearerAuth: []
+      responses:
+        "201":
+          description: Invoice created
+  /api/analytics/metrics:
+    get:
+      summary: Get KPI metrics
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Metric summary
+  /api/access/allowed:
+    get:
+      summary: Allowed access member IDs
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Allowed member list

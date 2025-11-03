@@ -1,0 +1,11 @@
+node_modules
+npm-debug.log
+.env
+.env.*
+dist
+build
+coverage
+apps/api/node_modules
+apps/web/node_modules
+.DS_Store
+tmp
