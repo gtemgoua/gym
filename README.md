@@ -1,100 +1,84 @@
 # Gym & Studio Management SaaS
 
-Production-minded starter for a gym, martial-arts school, and fitness studio management platform. The stack is TypeScript end-to-end with a modular backend, shared packages, and a React admin/member UI.
+Modernized stack featuring an ASP.NET Core 8 Web API and an Angular 18 admin experience to manage memberships, billing, scheduling, attendance, and analytics for gyms and studios.
 
-## Highlights
+## Architecture Overview
 
-- **Domain-driven backend** (`apps/api`) with Express + Prisma and clear modules for members, billing, scheduling, access, and analytics.
-- **Postgres schema** aligned with the MVP data model (memberships, billing, classes, attendance, CRM, messaging, access control).
-- **Shared packages** for UI components, navigation config, and validation helpers.
-- **Seed data** for a demo tenant including owner, staff, sample members, plans, and templates.
-- **OpenAPI spec** for core endpoints under `docs/openapi.yaml`.
-- **Dockerfile** for containerizing the API, plus scripts for migrations and seeding.
+- **Backend**: ASP.NET Core 8 Web API (`apps/api`) with EF Core + PostgreSQL. JWT auth, CORS, and modular controllers align with the original API surface so existing clients can migrate smoothly.
+- **Frontend**: Angular 18 SPA (`apps/web`) recreating the PulseFit UI—login, dashboard tiles, and resource tables for members, plans, classes, bookings, attendance, leads, and billing.
+- **Database**: PostgreSQL via Docker compose. `DataSeeder` seeds demo users, plans, members, and subscriptions for quick demos.
+- **Containerization**: Dockerfiles for both services plus a compose stack (`docker-compose.yml`) that wires the API, web app, and database together.
 
-## Monorepo Structure
+## Prerequisites
 
-```
-apps/
-  api/         # REST API, Prisma schema, workers, seeds
-  web/         # React SPA for admin, staff, member (to be implemented)
-packages/
-  config/      # Shared navigation and app config
-  shared/      # Shared DTOs + zod schemas
-  ui/          # Reusable React UI primitives
-docs/
-  openapi.yaml
-```
+- .NET 8 SDK
+- Node.js 20+ (for Angular tooling)
+- Docker (optional but recommended for local parity)
 
-## Getting Started
-
-1. **Install dependencies** (this auto-installs API & web packages via the `postinstall` hook)
-
-   ```bash
-   npm install
-   ```
-
-   If the hook is skipped, run `npm run bootstrap` to install `apps/api` and `apps/web` manually.
-
-2. **Environment variables**
-
-   ```bash
-   cp apps/api/.env.example apps/api/.env
-   # Adjust DATABASE_URL, Stripe/Postmark keys, etc.
-   ```
-
-3. **Database**
-
-   ```bash
-   npm run db:push
-   npm run seed
-   ```
-
-4. **Run the API**
-
-   ```bash
-   npm run dev:api
-   ```
-
-   The server listens on `http://localhost:4000`. Health check at `/health`.
-
-5. **Run the Web App**
-
-   ```bash
-   npm run dev:web
-   ```
-
-## Testing
+## Backend Setup (`apps/api`)
 
 ```bash
-npm run test
+cd apps/api
+# restore packages
+ dotnet restore
+# run EF migrations & seed sample data
+ dotnet run
 ```
 
-Back-end tests use Vitest. Add unit coverage around billing rules, booking eligibility, and API handlers within `apps/api/tests`.
+The API listens on `http://localhost:4000` by default. Health check: `GET /health`.
 
-## Containerized Stack
+Environment configuration lives in `appsettings.json`. Override values via environment variables (`ConnectionStrings__Default`, `Jwt__SecretKey`, etc.).
 
-Spin up Postgres, API, and the React app behind Nginx with a single command:
+## Frontend Setup (`apps/web`)
+
+```bash
+cd apps/web
+npm install
+npm run start
+```
+
+Angular dev server runs at `http://localhost:4200` and proxies API calls to `/api` (configure via `ng serve --proxy-config` if needed).
+
+## Dockerized Environment
+
+Launch the full stack (Postgres + API + Angular + Nginx proxy) with:
 
 ```bash
 docker compose up --build
 ```
 
-- App available at `http://localhost:8080`
-- API reachable at `http://localhost:8080/api`
-- Adjust secrets (JWT, Stripe, email) in `docker-compose.yml` before production use.
-- Set `RUN_SEED=true` on the `api` service if you want the demo data seeded on start.
+- Web UI: `http://localhost:8080`
+- API: `http://localhost:8080/api`
 
-Stop everything with `docker compose down` (add `-v` to drop the Postgres volume).
+Demo credentials from the seed data: `owner@gym.test / ChangeMe123!`
 
-## Deployment
+Stop the stack with `docker compose down` (add `-v` to drop the Postgres volume).
 
-- Build API container: `docker build -t gym-api ./apps/api`
-- Build Web container: `docker build -t gym-web ./apps/web`
-- Zero-downtime deploys via standard rolling update; run `prisma migrate deploy` pre-release.
+## Project Layout
+
+```
+apps/
+  api/        # ASP.NET Core Web API, EF Core models, seeding
+  web/        # Angular 18 SPA
+Dockerfile    # per-project Dockerfiles (in each app directory)
+docker-compose.yml
+```
+
+Key backend directories:
+
+- `Domain/Entities` – EF Core entities mirroring the legacy schema.
+- `Infrastructure/AppDbContext.cs` – DbContext + relationships.
+- `Controllers/` – Auth, members, plans, analytics, classes, bookings, attendance, leads, billing, and access endpoints.
+- `Application/Services` – JWT token factory & supporting DTOs.
+
+Key frontend highlights:
+
+- `app/services` – API + auth utilities, HTTP interceptors.
+- `app/pages` – Standalone components for login, dashboard, members, etc.
+- `app/routes.ts` – Angular router definitions + auth guard.
 
 ## Next Steps
 
-- Flesh out the React app inside `apps/web`.
-- Add background job workers for billing retries, dunning, and report scheduling.
-- Expand Stripe webhook handling and integrate Postmark for transactional email delivery.
-- Implement real access controller adapters and Phase 2 features (multi-location, SMS, payroll, etc.).
+- Flesh out remaining endpoints (subscriptions, messaging, etc.) as needed.
+- Wire in production-ready error handling, input validation, and background jobs.
+- Expand Angular components with richer forms, filters, and state management.

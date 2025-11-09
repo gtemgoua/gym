@@ -1,15 +1,8 @@
 {
-  "extends": "../../tsconfig.base.json",
+  "extends": "./tsconfig.app.json",
   "compilerOptions": {
-    "jsx": "react-jsx",
-    "baseUrl": "src",
-    "allowJs": false,
-    "types": ["vite/client", "node"],
-    "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "Node"
+    "types": ["node"]
   },
-  "include": ["src", "vite.config.ts"],
-  "exclude": ["dist", "node_modules"]
+  "files": [],
+  "references": [{ "path": "./tsconfig.app.json" }, { "path": "./tsconfig.spec.json" }]
 }

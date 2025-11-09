@@ -1,0 +1,9 @@
+<h1>Plans</h1>
+<div class="grid">
+  <div class="card" *ngFor="let plan of plans">
+    <h3>{{ plan.name }}</h3>
+    <p class="price">${{ plan.price }}</p>
+    <p class="muted">Billing: {{ plan.billingPeriod }}</p>
+    <p>{{ plan.description || 'No description' }}</p>
+  </div>
+</div>

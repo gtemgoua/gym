@@ -1,0 +1,19 @@
+<h1>Bookings</h1>
+<div class="card">
+  <table>
+    <thead>
+      <tr>
+        <th>Member</th>
+        <th>Class</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let booking of bookings">
+        <td>{{ booking.member?.name || 'Member' }}</td>
+        <td>{{ booking.class?.startAt | date: 'short' }}</td>
+        <td>{{ booking.status }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

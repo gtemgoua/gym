@@ -1,0 +1,10 @@
+<h1>Leads</h1>
+<div class="card">
+  <div class="row" *ngFor="let lead of leads">
+    <div>
+      <strong>{{ lead.name }}</strong>
+      <p>{{ lead.email || lead.phone || 'No contact' }}</p>
+    </div>
+    <span class="badge">{{ lead.stage }}</span>
+  </div>
+</div>

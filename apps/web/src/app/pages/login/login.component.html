@@ -1,0 +1,20 @@
+<div class="login-page">
+  <div class="card">
+    <div class="logo">PF</div>
+    <h1>PulseFit Command</h1>
+    <p class="subtitle">Sign in to manage members, classes, and billing.</p>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <label>
+        <span>Email</span>
+        <input type="email" formControlName="email" />
+      </label>
+      <label>
+        <span>Password</span>
+        <input type="password" formControlName="password" />
+      </label>
+      <button type="submit" [disabled]="submitting">{{ submitting ? 'Signing in…' : 'Sign in' }}</button>
+      <p class="error" *ngIf="error">{{ error }}</p>
+    </form>
+  </div>
+</div>

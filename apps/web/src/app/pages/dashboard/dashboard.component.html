@@ -1,0 +1,28 @@
+<h1>Today</h1>
+<div class="grid">
+  <div class="card" *ngFor="let stat of [
+    { label: 'Active Members', value: metrics?.totalMembers ?? '—' },
+    { label: 'MRR', value: metrics?.mrr ? ('$' + metrics?.mrr.toFixed(0)) : '—' },
+    { label: 'Churn', value: metrics?.churnRate ? metrics?.churnRate + '%' : '—' },
+    { label: 'LTV', value: metrics?.ltv ? ('$' + metrics?.ltv.toFixed(0)) : '—' }
+  ]">
+    <p class="label">{{ stat.label }}</p>
+    <p class="value">{{ stat.value }}</p>
+  </div>
+</div>
+
+<section class="card">
+  <h2>Upcoming Classes</h2>
+  <div *ngIf="today?.upcomingClasses?.length; else empty">
+    <div class="row" *ngFor="let cls of today.upcomingClasses">
+      <div>
+        <strong>{{ cls.template?.name || 'Class' }}</strong>
+        <p>{{ cls.startAt | date: 'short' }} • {{ cls.location }}</p>
+      </div>
+      <span>{{ cls.bookings?.length || 0 }}/{{ cls.capacity }} booked</span>
+    </div>
+  </div>
+  <ng-template #empty>
+    <p class="muted">No classes scheduled for today.</p>
+  </ng-template>
+</section>

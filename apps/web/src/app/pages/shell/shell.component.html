@@ -1,0 +1,16 @@
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand">PulseFit</div>
+    <nav>
+      <a *ngFor="let item of nav" [routerLink]="item.path" routerLinkActive="active">{{ item.label }}</a>
+    </nav>
+    <div class="user-card" *ngIf="user() as current">
+      <div class="name">{{ current.name }}</div>
+      <div class="role">{{ current.role }}</div>
+      <button (click)="signOut()">Sign out</button>
+    </div>
+  </aside>
+  <main>
+    <router-outlet></router-outlet>
+  </main>
+</div>

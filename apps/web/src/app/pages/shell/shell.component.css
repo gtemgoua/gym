@@ -1,0 +1,60 @@
+.layout {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  min-height: 100vh;
+}
+
+.sidebar {
+  background: #0f172a;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+}
+
+.brand {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+}
+
+nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  flex: 1;
+}
+
+nav a {
+  color: #cbd5f5;
+  text-decoration: none;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+}
+
+nav a.active,
+nav a:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.user-card {
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  padding-top: 1rem;
+}
+
+.user-card button {
+  margin-top: 0.75rem;
+  width: 100%;
+  padding: 0.65rem;
+  border-radius: 0.75rem;
+  border: none;
+  background: #f97316;
+  color: white;
+  font-weight: 600;
+}
+
+main {
+  padding: 2rem;
+  background: #f8fafc;
+}

@@ -1,11 +1,23 @@
+# Dependencies
 node_modules
-dist
-build
-.turbo
-.env
-.env.*
-coverage
-pnpm-lock.yaml
-package-lock.json
-tmp
+**/bin
+**/obj
+
+# Build artifacts
+/dist
+/build
+/out-tsc
+/app/publish
+
+# Environment files
+*.env
+appsettings.*.local.json
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+
+# Misc
 .DS_Store
+coverage

@@ -1,0 +1,10 @@
+<h1>Attendance</h1>
+<div class="card">
+  <div class="row" *ngFor="let record of records">
+    <div>
+      <strong>{{ record.member?.name || 'Member' }}</strong>
+      <p>{{ record.checkinAt | date: 'short' }} • {{ record.method }}</p>
+    </div>
+    <span>{{ record.class?.location || 'Open Gym' }}</span>
+  </div>
+</div>

@@ -1,0 +1,24 @@
+<h1>Members</h1>
+<div class="card">
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let member of members">
+        <td>{{ member.name }}</td>
+        <td>{{ member.email }}</td>
+        <td>{{ member.phone || '—' }}</td>
+        <td>
+          <span class="badge">{{ member.status }}</span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <p *ngIf="!members.length && !loading" class="muted">No members yet.</p>
+</div>

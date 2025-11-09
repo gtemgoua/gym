@@ -1,0 +1,8 @@
+<h1>Classes</h1>
+<div class="card" *ngFor="let cls of classes">
+  <div>
+    <strong>{{ cls.template?.name || 'Class' }}</strong>
+    <p>{{ cls.startAt | date: 'short' }} • {{ cls.location }}</p>
+  </div>
+  <div class="badge">{{ cls.status }}</div>
+</div>
