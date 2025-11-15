@@ -3,6 +3,7 @@ using System;
 using GymManagement.Api.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GymManagement.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251115021247_NormalizeDisciplines2")]
+    partial class NormalizeDisciplines2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -122,6 +125,9 @@ namespace GymManagement.Api.Migrations
 
                     b.Property<Guid?>("CoachId")
                         .HasColumnType("uuid");
+
+                    b.Property<string>("Discipline")
+                        .HasColumnType("text");
 
                     b.Property<Guid?>("DisciplineId")
                         .HasColumnType("uuid")
@@ -638,6 +644,10 @@ namespace GymManagement.Api.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("DisciplinesJson")
+                        .HasColumnType("text")
+                        .HasColumnName("DisciplinesJson");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(160)
@@ -739,7 +749,7 @@ namespace GymManagement.Api.Migrations
 
             modelBuilder.Entity("GymManagement.Api.Domain.Entities.ClassEvent", b =>
                 {
-                    b.HasOne("GymManagement.Api.Domain.Entities.Discipline", "Discipline")
+                    b.HasOne("GymManagement.Api.Domain.Entities.Discipline", "DisciplineNavigation")
                         .WithMany()
                         .HasForeignKey("DisciplineId");
 
@@ -747,7 +757,7 @@ namespace GymManagement.Api.Migrations
                         .WithMany("Events")
                         .HasForeignKey("TemplateId");
 
-                    b.Navigation("Discipline");
+                    b.Navigation("DisciplineNavigation");
 
                     b.Navigation("Template");
                 });

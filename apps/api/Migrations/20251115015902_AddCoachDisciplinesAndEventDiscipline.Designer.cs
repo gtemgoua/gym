@@ -3,6 +3,7 @@ using System;
 using GymManagement.Api.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GymManagement.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251115015902_AddCoachDisciplinesAndEventDiscipline")]
+    partial class AddCoachDisciplinesAndEventDiscipline
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -123,9 +126,8 @@ namespace GymManagement.Api.Migrations
                     b.Property<Guid?>("CoachId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("DisciplineId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("DisciplineId");
+                    b.Property<string>("Discipline")
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("EndAt")
                         .HasColumnType("timestamp with time zone");
@@ -153,8 +155,6 @@ namespace GymManagement.Api.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("DisciplineId");
 
                     b.HasIndex("TemplateId");
 
@@ -204,48 +204,6 @@ namespace GymManagement.Api.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ClassTemplates");
-                });
-
-            modelBuilder.Entity("GymManagement.Api.Domain.Entities.Discipline", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Disciplines");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("aa2a2505-23b8-4738-a5fb-7ac3afc97c44"),
-                            Name = "Kick-boxing"
-                        },
-                        new
-                        {
-                            Id = new Guid("3317ed17-27e0-4257-90c8-c19f62b81dcd"),
-                            Name = "Self-defense"
-                        },
-                        new
-                        {
-                            Id = new Guid("4fe1d315-75f5-489a-aa85-3f3f9eeccdee"),
-                            Name = "Taekwondo"
-                        },
-                        new
-                        {
-                            Id = new Guid("9a641f01-5b10-466c-b2f4-6783782a0ab8"),
-                            Name = "Jiu-Jitsu"
-                        },
-                        new
-                        {
-                            Id = new Guid("f081556f-a1b9-4438-8925-edd2fec103dd"),
-                            Name = "MMA"
-                        });
                 });
 
             modelBuilder.Entity("GymManagement.Api.Domain.Entities.Invoice", b =>
@@ -638,6 +596,10 @@ namespace GymManagement.Api.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("DisciplinesJson")
+                        .HasColumnType("text")
+                        .HasColumnName("DisciplinesJson");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(160)
@@ -671,21 +633,6 @@ namespace GymManagement.Api.Migrations
                         .IsUnique();
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("UserDisciplines", b =>
-                {
-                    b.Property<Guid>("DisciplineId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("DisciplineId", "UserId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserDisciplines");
                 });
 
             modelBuilder.Entity("GymManagement.Api.Domain.Entities.AccessGrant", b =>
@@ -739,15 +686,9 @@ namespace GymManagement.Api.Migrations
 
             modelBuilder.Entity("GymManagement.Api.Domain.Entities.ClassEvent", b =>
                 {
-                    b.HasOne("GymManagement.Api.Domain.Entities.Discipline", "Discipline")
-                        .WithMany()
-                        .HasForeignKey("DisciplineId");
-
                     b.HasOne("GymManagement.Api.Domain.Entities.ClassTemplate", "Template")
                         .WithMany("Events")
                         .HasForeignKey("TemplateId");
-
-                    b.Navigation("Discipline");
 
                     b.Navigation("Template");
                 });
@@ -845,23 +786,6 @@ namespace GymManagement.Api.Migrations
                     b.Navigation("Member");
 
                     b.Navigation("Plan");
-                });
-
-            modelBuilder.Entity("UserDisciplines", b =>
-                {
-                    b.HasOne("GymManagement.Api.Domain.Entities.Discipline", null)
-                        .WithMany()
-                        .HasForeignKey("DisciplineId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("FK_UserDisciplines_DisciplineId");
-
-                    b.HasOne("GymManagement.Api.Domain.Entities.User", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("FK_UserDisciplines_UserId");
                 });
 
             modelBuilder.Entity("GymManagement.Api.Domain.Entities.ClassEvent", b =>
